@@ -1,5 +1,6 @@
 # GIFT_Python_code
 GIFT-64 lightweight cipher is modeled in software platform using Python.
+
 #######GIFT_Encryption######
 plaintext=0xa231fc9b8214de60
 key=0x2b7e151628aed2a6abf7158809cf4f3c
