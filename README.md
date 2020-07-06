@@ -352,3 +352,16 @@ def perm_func(num):
     p_out4=(hex12|hex13|hex14|hex15)<<16
     p_out=p_out2|p_out3|p_out4|p_out1
     return p_out
+
+#######lfsr_func######
+def lfsr_func(y):
+    #print("y:",y)
+    y1=(y&0x20)>>5
+    #print("y1:",y1)
+    y2=(y&0x10)>>4
+    #print("y2:",y2)
+    y3=(y1^y2)^1
+    #print("y3:",y3)
+    y4=((y&0x1f)<<1)|y3
+    #print("y4:",y4)
+    return y4
