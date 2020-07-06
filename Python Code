@@ -367,8 +367,4 @@ def lfsr_func(y):
     #print("y4:",y4)
     return y4
 
-The test vectors for GIFT-64 and GIFT-128 are given below.
-######Test_Vectors_GIFT_64######
 
-
-######Test_Vectors_GIFT_128######
