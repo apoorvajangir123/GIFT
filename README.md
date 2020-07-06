@@ -1,5 +1,5 @@
 # GIFT_Python_and_Test_Vectors
-GIFT-64 lightweight cipher is modeled in software platform using Python.
+GIFT-64 lightweight cipher is modeled in software platform using Python. 
 
 #######GIFT_Encryption######
 plaintext=0xa231fc9b8214de60
@@ -366,3 +366,9 @@ def lfsr_func(y):
     y4=((y&0x1f)<<1)|y3
     #print("y4:",y4)
     return y4
+
+The test vectors for GIFT-64 and GIFT-128 are given below.
+######Test_Vectors_GIFT_64######
+
+
+######Test_Vectors_GIFT_128######
