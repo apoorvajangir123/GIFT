@@ -39,3 +39,4 @@ def sbox_func(sbox_in):
     return sbox_out
 #print("output:",sbox_out)
 #sbox_func(0)
+a
