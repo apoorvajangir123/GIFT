@@ -148,4 +148,207 @@ def addroundkey_func(num, num1):
     addroundkey=addkey|x
     return addroundkey
 
+#######addroundconstant_func######
+def addround_constant_func(lfsr_out,perm_out):
+    lfsr_out0=(lfsr_out & 0x20)
+    #print('lfsr_out0',hex(lfsr_out0))
+    lfsr_out1=(lfsr_out & 0x10)
+    #print('lfsr_out1',hex(lfsr_out1))
+    lfsr_out2=(lfsr_out & 0x08)
+    #print('lfsr_out2',hex(lfsr_out2))
+    lfsr_out3=(lfsr_out & 0x04)
+    #print('lfsr_out3',hex(lfsr_out3))
+    lfsr_out4=(lfsr_out & 0x02)
+    #print('lfsr_out4',hex(lfsr_out4))
+    lfsr_out5=(lfsr_out & 0x01)
+    #print('lfsr_out5',hex(lfsr_out5))
+    ###
+    #perm_out63=(perm_out & 0x8000000000000000)>>63
+    #print('perm_out63',hex(perm_out63))
+    perm_out63=(((perm_out & 0x8000000000000000)>>63) ^ 1)<<63
+    #print('perm_out63',hex(perm_out63))
+    perm_out23=(((perm_out & 0x0000000000800000)>>23) ^lfsr_out0 )<<23
+    #print('perm_out23',hex(perm_out23))
+    perm_out19=(((perm_out & 0x0000000000080000)>>19) ^lfsr_out1)<<19
+    #print('perm_out19',hex(perm_out19))
+    perm_out15=(((perm_out & 0x0000000000008000)>>15) ^ lfsr_out2)<<15
+    #print('perm_out15',hex(perm_out15))
+    perm_out11=(((perm_out & 0x0000000000000800)>>11) ^ lfsr_out3)<<11
+    #print('perm_out11',hex(perm_out11))
+    perm_out7=(((perm_out & 0x0000000000000080)>>7) ^ lfsr_out4)<<7
+    #print('perm_out7',hex(perm_out7))
+    perm_out3=(((perm_out & 0x0000000000000008)>>3) ^ lfsr_out5)<<3
+    #print('perm_out3',hex(perm_out3))
+    perm_out_updated=(perm_out & 0x7fffffffff777777)
+    add_round_constant=perm_out_updated |perm_out3 |perm_out7| perm_out11|perm_out15|perm_out19|perm_out23|perm_out63
+    return add_round_constant
 
+#######sbox16_func######
+def sbox16_func(plaintext):
+    plaintext0=(plaintext & 0xf000000000000000)>>60
+    plaintext1=(plaintext & 0x0f00000000000000)>>56
+    plaintext2=(plaintext & 0x00f0000000000000)>>52
+    plaintext3=(plaintext & 0x000f000000000000)>>48
+    plaintext4=(plaintext & 0x0000f00000000000)>>44
+    plaintext5=(plaintext & 0x00000f0000000000)>>40
+    plaintext6=(plaintext & 0x000000f000000000)>>36
+    plaintext7=(plaintext & 0x0000000f00000000)>>32
+    plaintext8=(plaintext & 0x00000000f0000000)>>28
+    plaintext9=(plaintext & 0x000000000f000000)>>24
+    plaintext10=(plaintext & 0x0000000000f00000)>>20
+    plaintext11=(plaintext & 0x00000000000f0000)>>16
+    plaintext12=(plaintext & 0x000000000000f000)>>12
+    plaintext13=(plaintext & 0x0000000000000f00)>>8
+    plaintext14=(plaintext & 0x00000000000000f0)>>4
+    plaintext15=(plaintext & 0x000000000000000f)
+    #print('plaintext0',hex(plaintext0))
+    plaintext0=(sbox_func(plaintext0))<<60
+    #print('plaintext0',hex(plaintext0))
+    plaintext1=(sbox_func(plaintext1))<<56
+    #print('plaintext1',hex(plaintext1))
+    plaintext2=(sbox_func(plaintext2))<<52
+    plaintext3=(sbox_func(plaintext3))<<48
+    plaintext4=(sbox_func(plaintext4))<<44
+    plaintext5=(sbox_func(plaintext5))<<40
+    plaintext6=(sbox_func(plaintext6))<<36
+    plaintext7=(sbox_func(plaintext7))<<32
+    plaintext8=(sbox_func(plaintext8))<<28
+    plaintext9=(sbox_func(plaintext9))<<24
+    plaintext10=(sbox_func(plaintext10))<<20
+    plaintext11=(sbox_func(plaintext11))<<16
+    plaintext12=(sbox_func(plaintext12))<<12
+    plaintext13=(sbox_func(plaintext13))<<8
+    plaintext14=(sbox_func(plaintext14))<<4
+    plaintext15=(sbox_func(plaintext15))
+    sbox_out1=plaintext0|plaintext1|plaintext2|plaintext3|plaintext4|plaintext5|plaintext6|plaintext7
+    sbox_out2=plaintext8|plaintext9|plaintext10|plaintext11|plaintext12|plaintext13|plaintext14|plaintext15
+    sbox_out=sbox_out1|sbox_out2
+    return sbox_out
+    
+#######sbox_func######
+def sbox_func(sbox_in):
+    sbox_out=int()
+    if sbox_in==0:
+            sbox_out=1;
+    elif sbox_in==1:
+            sbox_out=0xa;
+    elif sbox_in==2:
+            sbox_out=4;
+    elif sbox_in==3:
+            sbox_out=0xc;
+    elif sbox_in==4:
+            sbox_out=6;
+    elif sbox_in==5:
+            sbox_out=0xf;
+    elif sbox_in==6:
+            sbox_out=3;
+    elif sbox_in==7:
+            sbox_out=9;
+    elif sbox_in==8:
+            sbox_out=2;
+    elif sbox_in==9:
+            sbox_out=0xd;
+    elif sbox_in==0xa:
+            sbox_out=0xb;
+    elif sbox_in==0xb:
+            sbox_out=7;
+    elif sbox_in==0xc:
+            sbox_out=5;
+    elif sbox_in==0xd:
+            sbox_out=0;
+    elif sbox_in==0xe:
+            sbox_out=8;
+    elif sbox_in==0xf:
+            sbox_out=0xe;
+    return sbox_out
+
+#######perm_func######
+def perm_func(num):
+    num0=(num & 0x8000000000000000)>>0
+    num1=(num & 0x4000000000000000)>>16
+    num2=(num & 0x2000000000000000)>>32
+    num3=(num & 0x1000000000000000)>>48
+    num4=(num & 0x0800000000000000)>>44
+    num5=(num & 0x0400000000000000)<<4
+    num6=(num & 0x0200000000000000)>>12
+    num7=(num & 0x0100000000000000)>>28
+    num8=(num & 0x0080000000000000)>>24
+    num9=(num & 0x0040000000000000)>>40
+    num10=(num & 0x0020000000000000)<<8
+    num11=(num & 0x0010000000000000)>>8
+    num12=(num & 0x0008000000000000)>>4
+    num13=(num & 0x0004000000000000)>>20
+    num14=(num & 0x0002000000000000)>>36
+    num15=(num & 0x0001000000000000)<<12
+    num16=(num & 0x0000800000000000)<<12
+    num17=(num & 0x0000400000000000)>>4
+    num18=(num & 0x0000200000000000)>>20
+    num19=(num & 0x0000100000000000)>>36
+    num20=(num & 0x0000080000000000)>>32
+    num21=(num & 0x0000040000000000)<<16
+    num22=(num & 0x0000020000000000)
+    num23=(num & 0x0000010000000000)>>16
+    num24=(num & 0x0000008000000000)>>12
+    num25=(num & 0x0000004000000000)>>28
+    num26=(num & 0x0000002000000000)<<20
+    num27=(num & 0x0000001000000000)<<4
+    num28=(num & 0x0000000800000000)<<8
+    num29=(num & 0x0000000400000000)>>8
+    num30=(num & 0x0000000200000000)>>24
+    num31=(num & 0x0000000100000000)<<24
+    num32=(num & 0x0000000080000000)<<24
+    num33=(num & 0x0000000040000000)<<8
+    num34=(num & 0x0000000020000000)>>8
+    num35=(num & 0x0000000010000000)>>24
+    num36=(num & 0x0000000008000000)>>20
+    num37=(num & 0x0000000004000000)<<28
+    num38=(num & 0x0000000002000000)<<12
+    num39=(num & 0x0000000001000000)<<21
+    num40=(num & 0x0000000000800000)
+    num41=(num & 0x0000000000400000)>>16
+    num42=(num & 0x0000000000200000)<<32
+    num43=(num & 0x0000000000100000)<<16
+    num44=(num & 0x0000000000080000)<<20
+    num45=(num & 0x0000000000040000)<<4
+    num46=(num & 0x0000000000020000)>>12
+    num47=(num & 0x0000000000010000)<<36
+    num48=(num & 0x0000000000008000)<<36
+    num49=(num & 0x0000000000004000)<<20
+    num50=(num & 0x0000000000002000)<<4
+    num51=(num & 0x0000000000001000)>>12
+    num52=(num & 0x0000000000000800)>>8
+    num53=(num & 0x0000000000000400)<<14
+    num54=(num & 0x0000000000000200)<<24
+    num55=(num & 0x0000000000000100)<<8
+    num56=(num & 0x0000000000000080)<<12
+    num57=(num & 0x0000000000000040)>>4
+    num58=(num & 0x0000000000000020)<<44
+    num59=(num & 0x0000000000000010)<<28
+    num60=(num & 0x0000000000000008)<<32
+    num61=(num & 0x0000000000000004)<<16
+    num62=(num & 0x0000000000000002)
+    num63=(num & 0x0000000000000001)<<48
+    hex0=num0|num5|num10|num15      # 0-3
+    hex1=num16|num21|num26|num31    # 4-7
+    hex2=num32|num37|num42|num47    # 8-11
+    hex3=num48|num53|num58|num63    # 12-15
+    #temp1=(hex0|hex1|hex2|hex3)>>48
+    hex4=num12|num1|num6|num11      # 16-19
+    hex5=num28|num17|num22|num27    # 20-23
+    hex6=num44|num33|num38|num43    # 24-27
+    hex7=num60|num49|num54|num59    # 28-31
+   #temp1=(hex5|hex6|hex7|hex8)>>48
+    hex8=num8|num13|num2|num7       # 32-35
+    hex9=num24|num29|num18|num23    # 36-39
+    hex10=num40|num45|num34|num39   # 40-43
+    hex11=num56|num61|num50|num55   # 44-47
+    hex12=num4|num9|num14|num3     # 48-51
+    hex13=num20|num25|num30|num19   # 52-55
+    hex14=num36|num41|num46|num35   # 56-59
+    hex15=num52|num57|num62|num51   # 60-63
+    p_out1=(hex0|hex1|hex2|hex3)>>48
+    p_out2=(hex4|hex5|hex6|hex7)<<16
+    p_out3=(hex8|hex9|hex10|hex11)<<16
+    p_out4=(hex12|hex13|hex14|hex15)<<16
+    p_out=p_out2|p_out3|p_out4|p_out1
+    return p_out
